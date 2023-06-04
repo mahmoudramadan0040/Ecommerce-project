@@ -1,0 +1,13 @@
+POST  http://127.0.0.1:8000/login
+Content-Type: application/json
+
+{"username":"moatasem2023","password":"mo345"}
+
+###
+
+POST  http://127.0.0.1:8000/signup
+Content-Type: application/json
+
+{"username":"moatasem2023","is_staff": "True", "is_superuser": "True","password":"mo345", "email":"moa2020@gmail.com"}
+###
+
