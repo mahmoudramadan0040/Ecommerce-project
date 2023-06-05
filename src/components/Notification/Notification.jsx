@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './notification.css'
 function Notification(props) {
     useEffect(() => {
         console.log("asdasd");
@@ -17,7 +18,7 @@ function Notification(props) {
     },[])
     return ( 
         <div>
-            <ToastContainer />
+            <ToastContainer className={"toast-position"} />
         </div>
      );
 }

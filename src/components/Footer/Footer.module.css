@@ -6,7 +6,7 @@
 }
 .footer{
     background-color: var(--footer-background-color);
-    height: 400px;
+    height: fit-content;
     /* position: relative; */
 }
 .footer_icons{
@@ -21,6 +21,7 @@
     padding-right: 10px;
     margin: 0;
     margin-right: 1em;
+    margin-bottom: 1em;
 }
 .footer_icon:hover{
     background-color:var(--footer-color);

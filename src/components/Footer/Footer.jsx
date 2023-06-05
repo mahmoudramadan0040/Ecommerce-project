@@ -4,14 +4,19 @@ function Footer() {
         <div className={`${style.footer}`}>
             <div className='container'>
                 <div className="row gx-5">
-                    <div className='col-4 mt-5'>
+                    <div 
+                    className='
+                    col-xl-3  
+                    col-md-6 
+                    col-sm-12 
+                    col-xm-12 mt-5'>
                         <h3 className='mb-4'>
                             <img src='https://weblearnbd.net/tphtml/shofy-prv/shofy/assets/img/logo/logo.svg' alt="logo"></img>
                         </h3>
                         <p className='mb-5 fs-5'>
                         We are a team of designers and developers that create high quality WordPress
                         </p>
-                        <div className={`${style.footer_icons} d-flex justify-content-left`}>
+                        <div className={`${style.footer_icons} d-flex justify-content-left flex-wrap`}>
                             <div className={`${style.footer_icon}`}>
                                 <i className="bi bi-twitter"></i>
                             </div>
@@ -26,7 +31,11 @@ function Footer() {
                             </div>
                         </div>
                     </div>
-                    <div className='col-2 mt-5'>
+                    <div className='
+                    col-xl-3  
+                    col-md-6 
+                    col-sm-12 
+                    col-xm-12 mt-5'>
                         <h3>My Account</h3>
                         <ul className={`${style.footer_list}`}>
                             <li>track Orders</li>
@@ -37,7 +46,10 @@ function Footer() {
                             <li>Returns</li>
                         </ul>
                     </div>
-                    <div className='col-2 mt-5'>
+                    <div className='col-xl-3 
+                    col-md-6 
+                    col-sm-12 
+                    col-xm-12 mt-5'>
                         <h3>Information</h3>
                         <ul className={`${style.footer_list}`}>
                             <li>Our Story</li>
@@ -48,7 +60,11 @@ function Footer() {
                             <li>Contact Us</li>
                         </ul>
                     </div>
-                    <div className='col-4 mt-5'>
+                    <div className='
+                    col-xl-3 
+                    col-md-6 
+                    col-sm-12 
+                    col-xm-12 mt-5'>
                         <h3>Talk To Us</h3>
                         <div className={`${style.footer_link}`}>
                             <div>Got Questions? Call us</div>

@@ -5,34 +5,40 @@ import styleLogin from './login.module.css';
 function Login() {
 
     let [FormsValues ,setFormsValues] = useState({
-        username:'',
+        email:'',
         password:''
     });
+    let [LoginError,setLoginError] =useState(false) 
     const [disabled,setDisabled] = useState(true);
     let Inputemail =useRef(null)
     let Inputpassword =useRef(null)
     let [errors ,setErrors] = useState({
-        username:null,
+        email:null,
         password:null
     })
     let [errorRun,setErrorsRun]=useState(false)
     let [toastSuccessMsq,SettoastSuccessMsq] = useState(false)
     let [toastfailureMsq,SettoastfailureMsq] = useState(false)
     const handelsubmit = (event)=>{
+        SettoastSuccessMsq(false)
+        SettoastfailureMsq(false)
+        setLoginError(false);
         event.preventDefault();
-        if(errors.username || errors.password){
+        if(errors.email || errors.password){
             setErrorsRun(true);
         }else{
             if(FormsValues){
                 login(FormsValues)
                 .then(result => {
+                    console.log(result)
                     if(result == 200){
                         SettoastSuccessMsq(true);
+
+                    }else{
+                        SettoastfailureMsq(true);
+                        setLoginError(true);
                     }
-                }).catch(err => {
-                    console.log(err);
-                    SettoastfailureMsq(true);
-                });
+                })
                 // console.log(result)
             }
             setErrorsRun(false);
@@ -43,14 +49,15 @@ function Login() {
     const operationHandeler = (e) =>{
         // eslint-disable-next-line
         setErrorsRun(false)
-        if(e.target.name == "username"){
+        if(e.target.name == "email"){
             
-            if( e.target.value.length > 6 ){
-                setErrors({username:null})
+            if( e.target.value.length){
+                console.log("email","dsdfs")
+                setErrors({email:null})
                 setFormsValues({...FormsValues, [e.target.name]:e.target.value})
             }else{
                 
-                setErrors({...errors,username:'invalid username , username should be at least 6 characters long'});
+                setErrors({...errors,email:'invalid email , email should as mahmoud@email.com '});
             }
             console.log(errors)
             
@@ -78,6 +85,7 @@ function Login() {
     }
 
     return ( 
+        
         <div className={`container`}>
             {toastSuccessMsq ? (
             <Notification msg={"login successfuly !"} context={true}></Notification>
@@ -127,15 +135,27 @@ function Login() {
 
 
                             <form onSubmit={handelsubmit}>
+                                {LoginError ? (
+                                    <div>
+                                        <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <strong>Erorr</strong> email or password is incorrect. please try again.
+                                            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    </div>
+                                    
+                                ):null}
+                                
+
+
                                 <div className="mb-2">
-                                    <label htmlFor="exampleInputEmail1" className={`${styleLogin.form_label}`}>Your username </label>
-                                    <input name="username" ref={Inputemail} onChange={operationHandeler} 
+                                    <label htmlFor="exampleInputEmail1" className={`${styleLogin.form_label}`}>Your email </label>
+                                    <input name="email" ref={Inputemail} onChange={operationHandeler} 
                                     className={`${(errors.username && errorRun) ? styleLogin.error_input:styleLogin.form_input}`} 
                                      id="exampleInputEmail1" placeholder=' shopfy@mail.com ' aria-describedby="emailHelp"/>
 
                                     {/* validation error msg  */}
                                     <div className={`${styleLogin.errorMsg}`}>
-                                    {(errors.username && errorRun) ? errors.username : null}
+                                    {(errors.username && errorRun) ? errors.email : null}
                                     </div>
                                 </div>
                                 <div className="mb-2">

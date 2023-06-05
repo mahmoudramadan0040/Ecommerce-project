@@ -2,6 +2,7 @@ import './App.css';
 import Footer from './components/Footer/Footer';
 // import Login from './components/Login/Login';
 import NavigationBar from './components/NavigationBar/NavigationBar';
+import NotFound404 from './components/NotFound404/NotFound404';
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import { Route, Routes } from "react-router-dom";
@@ -12,15 +13,16 @@ function App() {
   return (
     <div className="App">
 
-      {/* <NavigationBar></NavigationBar> */}
+      <NavigationBar></NavigationBar>
       {/* <Login></Login> */}
       <Routes>
         <Route element={<ProtectedRoutes />}>
           <Route path="/home" element={<Home />} />
         </Route>
         <Route path="/login" element={<Login />} />
+        <Route path="*" element={<NotFound404></NotFound404>}/>
       </Routes>
-      <Register></Register>
+      {/* <Register></Register> */}
       <Footer></Footer>
     </div>
   );
