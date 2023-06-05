@@ -1,8 +1,98 @@
 import style from './Register.module.css';
+import { useState ,useRef } from 'react';
+import {login} from '../../services/user.services';
 function Register() {
+
+    let [FormsValues ,setFormsValues] = useState({
+        name:'',
+        email:'',
+        password:''
+    });
+    const [disabled,setDisabled] = useState(true);
+    let Inputemail =useRef('null')
+    let Inputpassword =useRef(null)
+    let Inputname =useRef(null)
+    let [errors ,setErrors] = useState({
+        name:null,
+        email:null,
+        password:null
+    })
+    
+    let [errorRun,setErrorsRun]=useState(false)
+    const handelsubmit = (event)=>{
+        event.preventDefault();
+        console.log(errors.email ,errors.password)
+        if(errors.email || errors.password || errors.name){
+            setErrorsRun(true);
+        }else{
+            if(FormsValues){
+                console.log("dfsdfsd")
+                login(FormsValues)
+            }
+            setErrorsRun(false);
+        }
+        
+        // console.log(FormsValues)
+    }
+    const operationHandeler = (e) =>{
+        // eslint-disable-next-line
+        setErrorsRun(false)
+        if(e.target.name == "email"){
+            let regex = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+            console.log(regex.test(e.target.value))
+            console.log(e.target.value)
+            if( regex.test(e.target.value) ){
+                setErrors({email:null})
+                setFormsValues({...FormsValues, [e.target.name]:e.target.value})
+            }else{
+                
+                setErrors({...errors,email:'invalid email address ! , example formate mahmoud@example.com'});
+            }
+            console.log(errors)
+            
+        }
+        if(e.target.name == "name"){
+            
+
+            if( e.target.value ){
+                setErrors({email:null})
+                setFormsValues({...FormsValues, [e.target.name]:e.target.value})
+            }else{
+                setErrors({...errors,email:'invalid username'});
+            }
+            console.log(errors)
+            
+        }
+        // eslint-disable-next-line
+        if(e.target.name == "password"){
+            if(e.target.value.length >= 4){
+                setFormsValues({...FormsValues, [e.target.name]:e.target.value})
+                setErrors({password:null})
+            }
+            else{
+                setErrors({...errors,password:'password must be at least 4 characters !'});
+            }
+        }
+
+        // check disabled submit btn based on data
+        console.log(Inputpassword.current.value.length)
+        if(!Inputpassword.current.value.length || 
+           !Inputemail.current.value.length    ||  
+           !Inputname.current.value.length){
+            setDisabled(true);
+        }
+        else{
+            setDisabled(false);
+        }
+       
+    }
+
+
+
     return ( 
         <div className={`${style.register_from} container`}>
             <div className="row justify-content-center">
+
                 <h1 className='text-center mt-5 mb-3 '>Register Now </h1>
                 <div className={`${style.sign_form}`}>
                     <div className={`${style.form_content}`}>
@@ -28,10 +118,10 @@ function Register() {
                                     <div className='ms-3'>sign with google</div>
                                 </div>
                                 <div className={`${style.register_icon}`}>
-                                    <i class={`bi bi-facebook ${style.facebook_icon}`}></i>
+                                    <i className={`bi bi-facebook ${style.facebook_icon}`}></i>
                                 </div>
                                 <div className={`${style.register_icon}`}>
-                                    <i class={`bi bi-apple ${style.apple_icon}`}></i>
+                                    <i className={`bi bi-apple ${style.apple_icon}`}></i>
                                 </div>
                             </div>
                             <div className='mt-4'>
@@ -39,21 +129,51 @@ function Register() {
                                 <div className={`text-center ${style.line_content}`}>or Sign up with Email</div>
                             </div>
                             
-                            <form>
-                                <div class="mb-2">
-                                    <label for="exampleInputEmail1" class={`${style.form_label}`}>Your Name </label>
-                                    <input type="email" class={` ${style.form_input} `} id="exampleInputEmail1" placeholder=' mahmoud ramadan ' aria-describedby="emailHelp"/>
+                            <form onSubmit={handelsubmit}>
+                                <div className="mb-2">
+                                    <label for="exampleInputEmail1" className={`${style.form_label}`}>Your Name </label>
+                                    <input type="text" 
+                                    onChange={operationHandeler} 
+                                    ref={Inputname}
+                                    name="name"
+                                    className={`${(errors.name && errorRun) ? style.error_input:style.form_input}`}
+                                    id="exampleInputEmail1" 
+                                    placeholder=' mahmoud ramadan ' aria-describedby="emailHelp"/>
+                                    {/* validation error msg  */}
+                                    <div className={`${style.errorMsg}`}>
+                                    {(errors.name && errorRun) ? errors.name : null}
+                                    </div>
                                 </div>
-                                <div class="mb-2">
-                                    <label for="exampleInputEmail1" class={`${style.form_label}`}>Your Email </label>
-                                    <input type="email" class={` ${style.form_input} `} id="exampleInputEmail1" placeholder=' shopfy@mail.com ' aria-describedby="emailHelp"/>
+                                <div className="mb-2">
+                                    <label for="exampleInputEmail1" className={`${style.form_label}`}>Your Email </label>
+                                    <input type="text" 
+                                    onChange={operationHandeler} 
+                                    ref={Inputemail}
+                                    name="email"
+                                    className={`${(errors.email && errorRun) ? style.error_input:style.form_input}`}
+                                    id="exampleInputEmail1" 
+                                    placeholder=' shopfy@mail.com ' aria-describedby="emailHelp"/>
+                                    {/* validation error msg  */}
+                                    <div className={`${style.errorMsg}`}>
+                                    {(errors.email && errorRun) ? errors.email : null}
+                                    </div>
                                 </div>
-                                <div class="mb-2">
-                                    <label for="exampleInputPassword1" class={`${style.form_label}`}>Password</label>
-                                    <input type="password" class={` ${style.form_input} `} placeholder=' Min. 6 character' id="exampleInputPassword1"/>
+                                <div className="mb-2">
+                                    <label for="exampleInputPassword1" className={`${style.form_label}`}>Password</label>
+                                    <input type="password"
+                                    onChange={operationHandeler} 
+                                    ref={Inputpassword}
+                                    name="password"
+                                    className={`${(errors.password && errorRun) ? style.error_input:style.form_input}`}
+                                    placeholder=' Min. 6 character' 
+                                    id="exampleInputPassword1"/>
+                                    {/* validation error msg  */}
+                                    <div className={`${style.errorMsg}`}>
+                                    {(errors.password && errorRun) ? errors.password : null}
+                                    </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class={`${style.form_submit_btn}`}>Sign Up</button>
+                                    <button type="submit" disabled={disabled} className={`${style.form_submit_btn}`}>Sign Up</button>
                                 </div>
                             </form>
                         </div>

@@ -114,4 +114,22 @@
 .form_submit_btn:hover{
     background-color: #0989FF;
 }
-
+.form_submit_btn[disabled]{
+    background-color: #bdbfc2;
+}
+.errorMsg{
+    text-align: center;
+    color: rgb(250, 57, 57);
+    font-family: var(--font-family);
+    font-size: small;
+    margin-top: 5px;
+    
+}
+.error_input{
+    position: relative;
+    padding:1em !important;
+    z-index: 1;
+    width: 100%;
+    box-shadow: 0 0 10px #b10a0a;
+    border: 1px solid #b10a0a;
+}

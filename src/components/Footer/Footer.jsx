@@ -2,8 +2,8 @@ import style from './Footer.module.css'
 function Footer() {
     return ( 
         <div className={`${style.footer}`}>
-            <div class='container'>
-                <div class="row gx-5">
+            <div className='container'>
+                <div className="row gx-5">
                     <div className='col-4 mt-5'>
                         <h3 className='mb-4'>
                             <img src='https://weblearnbd.net/tphtml/shofy-prv/shofy/assets/img/logo/logo.svg' alt="logo"></img>
@@ -13,16 +13,16 @@ function Footer() {
                         </p>
                         <div className={`${style.footer_icons} d-flex justify-content-left`}>
                             <div className={`${style.footer_icon}`}>
-                                <i class="bi bi-twitter"></i>
+                                <i className="bi bi-twitter"></i>
                             </div>
                             <div className={`${style.footer_icon}`}>
-                                <i class="bi bi-linkedin"></i>
+                                <i className="bi bi-linkedin"></i>
                             </div>
                             <div className={`${style.footer_icon}`}>
-                                <i class="bi bi-facebook"></i>
+                                <i className="bi bi-facebook"></i>
                             </div >
                             <div className={`${style.footer_icon}`}>
-                                <i class="bi bi-whatsapp"></i>
+                                <i className="bi bi-whatsapp"></i>
                             </div>
                         </div>
                     </div>

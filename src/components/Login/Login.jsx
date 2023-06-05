@@ -1,17 +1,90 @@
-import style from './login.module.css';
+import { useState ,useEffect ,useRef } from 'react';
+import {login} from '../../services/user.services';
+import Notification from '../Notification/Notification';
+import styleLogin from './login.module.css';
 function Login() {
+
+    let [FormsValues ,setFormsValues] = useState({
+        username:'',
+        password:''
+    });
+    const [disabled,setDisabled] = useState(true);
+    let Inputemail =useRef(null)
+    let Inputpassword =useRef(null)
+    let [errors ,setErrors] = useState({
+        username:null,
+        password:null
+    })
+    let [errorRun,setErrorsRun]=useState(false)
+    let [toastMsq,SetToastMsq] = useState(false)
+    const handelsubmit = (event)=>{
+        event.preventDefault();
+        if(errors.username || errors.password){
+            setErrorsRun(true);
+        }else{
+            if(FormsValues){
+                let result =login(FormsValues).then(data =>console.log( data) );
+                console.log(result)
+                SetToastMsq(true);
+            }
+            setErrorsRun(false);
+        }
+        
+        // console.log(FormsValues)
+    }
+    const operationHandeler = (e) =>{
+        // eslint-disable-next-line
+        setErrorsRun(false)
+        if(e.target.name == "username"){
+            
+            if( e.target.value.length > 6 ){
+                setErrors({username:null})
+                setFormsValues({...FormsValues, [e.target.name]:e.target.value})
+            }else{
+                
+                setErrors({...errors,username:'invalid username , username should be at least 6 characters long'});
+            }
+            console.log(errors)
+            
+        }
+        // eslint-disable-next-line
+        if(e.target.name == "password"){
+            if(e.target.value.length >= 4){
+                setFormsValues({...FormsValues, [e.target.name]:e.target.value})
+                setErrors({password:null})
+            }
+            else{
+                setErrors({...errors,password:'password must be at least 4 characters !'});
+            }
+        }
+
+        // check disabled submit btn based on data
+        console.log(Inputpassword.current.value.length)
+        if(!Inputpassword.current.value.length || !Inputemail.current.value.length){
+            setDisabled(true);
+        }
+        else{
+            setDisabled(false);
+        }
+       
+    }
+
     return ( 
-        <div className={`${style.login_from} container`}>
+        <div className={`container`}>
+            {toastMsq ? (
+            <Notification msg={"login successfuly !"}></Notification>
+            ):''}
+            
             <div className="row justify-content-center">
                 <h1 className='text-center mt-5 mb-3 '>My account  </h1>
-                <div className={`${style.sign_form}`}>
-                    <div className={`${style.form_content}`}>
-                        <div className={`${style.header_from}`}>Login to Shofy</div>
+                <div className={`${styleLogin.sign_form}`}>
+                    <div className={`${styleLogin.form_content}`}>
+                        <div className={`${styleLogin.header_from}`}>Login to Shofy</div>
                         
-                        <div className='text-center'> Don’t have an account? <span className={`${style.sign_text}`}> Create a free account</span> </div>
+                        <div className='text-center'> Don’t have an account? <span className={`${styleLogin.sign_text}`}> Create a free account</span> </div>
                         <div>
-                            <div className={`${style.login_icons} d-flex flex-wrap justify-content-center`}>
-                                <div className={`${style.login_icon} d-flex  align-items-center flex-shrink-0`}>
+                            <div className={`${styleLogin.login_icons} d-flex flex-wrap justify-content-center`}>
+                                <div className={`${styleLogin.login_icon} d-flex  align-items-center flex-shrink-0`}>
 
                                     <div>
                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -27,29 +100,49 @@ function Login() {
                                     ,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg></div> 
                                     <div className='ms-3'>sign with google</div>
                                 </div>
-                                <div className={`${style.login_icon}`}>
-                                    <i class={`bi bi-facebook ${style.facebook_icon}`}></i>
+                                <div className={`${styleLogin.login_icon}`}>
+                                    <i className={`bi bi-facebook ${styleLogin.facebook_icon}`}></i>
                                 </div>
-                                <div className={`${style.login_icon}`}>
-                                    <i class={`bi bi-apple ${style.apple_icon}`}></i>
+                                <div className={`${styleLogin.login_icon}`}>
+                                    <i className={`bi bi-apple ${styleLogin.apple_icon}`}></i>
                                 </div>
                             </div>
                             <div className='mt-4'>
-                                <hr className={`${style.break_line}`}></hr>
-                                <div className={`text-center ${style.line_content}`}> or Sign in with Email</div>
+                                <hr className={`${styleLogin.break_line}`}></hr>
+                                <div className={`text-center ${styleLogin.line_content}`}> or Sign in with username</div>
                             </div>
                             
-                            <form>
-                                <div class="mb-2">
-                                    <label for="exampleInputEmail1" class={`${style.form_label}`}>Your Email </label>
-                                    <input type="email" class={` ${style.form_input} `} id="exampleInputEmail1" placeholder=' shopfy@mail.com ' aria-describedby="emailHelp"/>
+
+
+
+                            <form onSubmit={handelsubmit}>
+                                <div className="mb-2">
+                                    <label htmlFor="exampleInputEmail1" className={`${styleLogin.form_label}`}>Your username </label>
+                                    <input name="username" ref={Inputemail} onChange={operationHandeler} 
+                                    className={`${(errors.username && errorRun) ? styleLogin.error_input:styleLogin.form_input}`} 
+                                     id="exampleInputEmail1" placeholder=' shopfy@mail.com ' aria-describedby="emailHelp"/>
+
+                                    {/* validation error msg  */}
+                                    <div className={`${styleLogin.errorMsg}`}>
+                                    {(errors.username && errorRun) ? errors.username : null}
+                                    </div>
                                 </div>
-                                <div class="mb-2">
-                                    <label for="exampleInputPassword1" class={`${style.form_label}`}>Password</label>
-                                    <input type="password" class={` ${style.form_input} `} placeholder=' Min. 6 character' id="exampleInputPassword1"/>
+                                <div className="mb-2">
+                                    <label htmlFor="exampleInputPassword1" className={`${styleLogin.form_label }`}>Password</label>
+                                    <input type="password" ref={Inputpassword} name="password" onChange={operationHandeler} 
+                                    className={`${(errors.password && errorRun) ? styleLogin.error_input:styleLogin.form_input}`} 
+                                    placeholder=' Min. 6 character' id="exampleInputPassword1"/>
+
+                                    {/* validation error msg  */}
+                                    <div className={`${styleLogin.errorMsg}`}>
+                                        {(errors.password && errorRun) ? errors.password : null}
+                                    </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class={`${style.form_submit_btn}`}>Sign Up</button>
+                                    <button type="submit"  
+                                    className={`${styleLogin.form_submit_btn}`}
+                                    disabled={disabled}
+                                    >Sign Up</button>
                                 </div>
                             </form>
                         </div>
