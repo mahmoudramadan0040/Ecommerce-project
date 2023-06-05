@@ -29,7 +29,8 @@
 .sign_text{
     color:#0989FF;
     font-weight: var(--font-login-weight);
-
+    cursor: pointer;
+    text-decoration: none !important;
 }
 .login_icons{
     margin:1em;

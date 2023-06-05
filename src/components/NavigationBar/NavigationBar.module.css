@@ -9,6 +9,9 @@
     top:0px;
     z-index: 3;
 }
+.header_higth{
+    min-height: 5em;
+}
 
 .second_header{
     position: fixed;

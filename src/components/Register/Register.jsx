@@ -1,13 +1,15 @@
 import style from './Register.module.css';
 import { useState ,useRef } from 'react';
+import { Link ,useNavigate} from 'react-router-dom';
 import {register} from '../../services/user.services';
 function Register() {
-
+    const navigate = useNavigate();
     let [FormsValues ,setFormsValues] = useState({
         username:'',
         email:'',
         password:''
     });
+    let [RegisterError,setRegisterError] =useState(false) 
     const [disabled,setDisabled] = useState(true);
     let Inputemail =useRef('null')
     let Inputpassword =useRef(null)
@@ -20,14 +22,25 @@ function Register() {
     
     let [errorRun,setErrorsRun]=useState(false)
     const handelsubmit = (event)=>{
+        setRegisterError(false)
         event.preventDefault();
         console.log(errors.email ,errors.password)
         if(errors.email || errors.password || errors.username){
             setErrorsRun(true);
         }else{
             if(FormsValues){
-                console.log("dfsdfsd")
-                register(FormsValues)
+                
+                register(FormsValues).then((result)=>{
+                    console.log(result)
+                    if(result == 201){
+
+                        setTimeout(() => {
+                            navigate('/home')
+                        }, 2000);
+                    }else{
+                        setRegisterError(true)
+                    }
+                })
             }
             setErrorsRun(false);
         }
@@ -91,14 +104,14 @@ function Register() {
 
     return ( 
         <div className={`${style.register_from} container`}>
-            <div className="row justify-content-center">
+            <div className="row justify-content-center mt-5">
 
                 <h1 className='text-center mt-5 mb-3 '>Register Now </h1>
                 <div className={`${style.sign_form}`}>
                     <div className={`${style.form_content}`}>
                         <div className={`${style.header_from}`}>Sign Up Shofy</div>
                         
-                        <div className='text-center'> already have an account ? <span className={`${style.sign_text}`}>sign in</span> </div>
+                        <div className='text-center'> already have an account ? <span className={`${style.sign_text}`}><Link to="/login" className={`${style.sign_text}`}>sign in</Link></span> </div>
                         <div>
                             <div className={`${style.register_icons} d-flex justify-content-center flex-wrap flex-shrink-0`}>
                                 <div className={`${style.register_icon} d-flex align-items-center`}>
@@ -128,10 +141,18 @@ function Register() {
                                 <hr className={`${style.break_line}`}></hr>
                                 <div className={`text-center ${style.line_content}`}>or Sign up with Email</div>
                             </div>
-                            
+                            {RegisterError ? (
+                                    <div>
+                                        <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <strong>Erorr</strong> email already exists ,please try another email !
+                                            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    </div>
+                                    
+                                ):null}
                             <form onSubmit={handelsubmit}>
                                 <div className="mb-2">
-                                    <label for="exampleInputEmail1" className={`${style.form_label}`}>Your Name </label>
+                                    <label htmlFor="exampleInputusername1" className={`${style.form_label}`}>Your Name </label>
                                     <input type="text" 
                                     onChange={operationHandeler} 
                                     ref={Inputname}
@@ -141,11 +162,11 @@ function Register() {
                                     placeholder=' mahmoud ramadan ' aria-describedby="emailHelp"/>
                                     {/* validation error msg  */}
                                     <div className={`${style.errorMsg}`}>
-                                    {(errors.name && errorRun) ? errors.username : null}
+                                    {(errors.username && errorRun) ? errors.username : null}
                                     </div>
                                 </div>
                                 <div className="mb-2">
-                                    <label for="exampleInputEmail1" className={`${style.form_label}`}>Your Email </label>
+                                    <label htmlFor="exampleInputEmail1" className={`${style.form_label}`}>Your Email </label>
                                     <input type="text" 
                                     onChange={operationHandeler} 
                                     ref={Inputemail}
@@ -159,7 +180,7 @@ function Register() {
                                     </div>
                                 </div>
                                 <div className="mb-2">
-                                    <label for="exampleInputPassword1" className={`${style.form_label}`}>Password</label>
+                                    <label htmlFor="exampleInputPassword1" className={`${style.form_label}`}>Password</label>
                                     <input type="password"
                                     onChange={operationHandeler} 
                                     ref={Inputpassword}

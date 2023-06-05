@@ -1,9 +1,10 @@
 import { useState ,useEffect ,useRef } from 'react';
+import { Link ,useNavigate } from 'react-router-dom';
 import {login} from '../../services/user.services';
 import Notification from '../Notification/Notification';
 import styleLogin from './login.module.css';
 function Login() {
-
+    const navigate = useNavigate();
     let [FormsValues ,setFormsValues] = useState({
         email:'',
         password:''
@@ -33,7 +34,9 @@ function Login() {
                     console.log(result)
                     if(result == 200){
                         SettoastSuccessMsq(true);
-
+                        setTimeout(() => {
+                            navigate('/home')
+                        }, 2000);
                     }else{
                         SettoastfailureMsq(true);
                         setLoginError(true);
@@ -50,13 +53,11 @@ function Login() {
         // eslint-disable-next-line
         setErrorsRun(false)
         if(e.target.name == "email"){
-            
-            if( e.target.value.length){
-                console.log("email","dsdfs")
+            let regex = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+            if( regex.test(e.target.value)){
                 setErrors({email:null})
                 setFormsValues({...FormsValues, [e.target.name]:e.target.value})
             }else{
-                
                 setErrors({...errors,email:'invalid email , email should as mahmoud@email.com '});
             }
             console.log(errors)
@@ -94,13 +95,15 @@ function Login() {
             <Notification msg={"loin failed  !"} context={false}></Notification>
             ):''}
             
-            <div className="row justify-content-center">
+            <div className="row justify-content-center mt-5">
                 <h1 className='text-center mt-5 mb-3 '>My account  </h1>
                 <div className={`${styleLogin.sign_form}`}>
                     <div className={`${styleLogin.form_content}`}>
                         <div className={`${styleLogin.header_from}`}>Login to Shofy</div>
                         
-                        <div className='text-center'> Don’t have an account? <span className={`${styleLogin.sign_text}`}> Create a free account</span> </div>
+                        <div className='text-center'>
+                             Don’t have an account? 
+                             <span className={`${styleLogin.sign_text}`}><Link to="/register" className={`${styleLogin.sign_text}`}> Create a free account</Link> </span> </div>
                         <div>
                             <div className={`${styleLogin.login_icons} d-flex flex-wrap justify-content-center`}>
                                 <div className={`${styleLogin.login_icon} d-flex  align-items-center flex-shrink-0`}>
@@ -148,10 +151,10 @@ function Login() {
 
 
                                 <div className="mb-2">
-                                    <label htmlFor="exampleInputEmail1" className={`${styleLogin.form_label}`}>Your email </label>
+                                    <label htmlFor="InputEmail1" className={`${styleLogin.form_label}`}>Your email </label>
                                     <input name="email" ref={Inputemail} onChange={operationHandeler} 
                                     className={`${(errors.username && errorRun) ? styleLogin.error_input:styleLogin.form_input}`} 
-                                     id="exampleInputEmail1" placeholder=' shopfy@mail.com ' aria-describedby="emailHelp"/>
+                                     id="InputEmail1" placeholder=' shopfy@mail.com ' aria-describedby="emailHelp"/>
 
                                     {/* validation error msg  */}
                                     <div className={`${styleLogin.errorMsg}`}>
@@ -159,10 +162,10 @@ function Login() {
                                     </div>
                                 </div>
                                 <div className="mb-2">
-                                    <label htmlFor="exampleInputPassword1" className={`${styleLogin.form_label }`}>Password</label>
+                                    <label htmlFor="InputPassword1" className={`${styleLogin.form_label }`}>Password</label>
                                     <input type="password" ref={Inputpassword} name="password" onChange={operationHandeler} 
                                     className={`${(errors.password && errorRun) ? styleLogin.error_input:styleLogin.form_input}`} 
-                                    placeholder=' Min. 6 character' id="exampleInputPassword1"/>
+                                    placeholder=' Min. 6 character' id="InputPassword1"/>
 
                                     {/* validation error msg  */}
                                     <div className={`${styleLogin.errorMsg}`}>
@@ -173,7 +176,7 @@ function Login() {
                                     <button type="submit"  
                                     className={`${styleLogin.form_submit_btn}`}
                                     disabled={disabled}
-                                    >Sign Up</button>
+                                    >Sign In</button>
                                 </div>
                             </form>
                         </div>

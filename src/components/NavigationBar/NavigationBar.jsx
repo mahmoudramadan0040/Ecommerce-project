@@ -1,8 +1,9 @@
 import style from './NavigationBar.module.css'
 import React, {useState, useEffect} from 'react'
+import {  Link  } from "react-router-dom";
+import { logout ,IsAuthenticated} from '../../services/user.services';
 function NavigationBar() {
-
-
+    const [auth , setAuth] = useState(false);
     const [show, setShow] = useState(false);
     const handleScroll = () => {
         if(window.scrollY > 1){
@@ -13,14 +14,18 @@ function NavigationBar() {
     }
     useEffect( () => {
         window.addEventListener('scroll', handleScroll);
-    
+
         return () => window.removeEventListener('scroll', handleScroll)
     })
+    const handleLogout =()=>{
+        logout();
+        window.location.reload();
+    }
     
     return ( 
         <div  className={`${style.main_header} `}>
             <div 
-            className={` 
+            className={`${style.header_higth} 
             
             d-flex mt-1 
             justify-content-between 
@@ -38,14 +43,27 @@ function NavigationBar() {
                 </div>
 
                 <div className="account-section d-flex align-items-center ">
-                    <div className='m-1'>
-                        <i className={`bi bi-person-circle ${style.account_logo}`}></i>
-                    </div>
-                    <div className="d-none d-lg-block lh-1">
-                        <div>Hello, sign in </div>
-                        <div>Your Account </div>
-                    </div>
-                    <div className=' d-block d-lg-none'>Sing in</div>
+                    
+                    
+                    {
+                        IsAuthenticated() ? (
+                            <div className='' onClick={handleLogout}>logout</div>
+                        ):(
+                        
+                            <Link to="/login" className='d-flex align-items-center'>
+                                <div className='m-1'>
+                                    <i className={`bi bi-person-circle ${style.account_logo}`}></i>
+                                </div>
+                                <div className="d-none d-lg-block lh-1">
+
+                                    <div>Hello, sign in </div>
+                                    <div>Your Account </div>
+                                </div>
+                                <div className=' d-block d-lg-none'>Sing in</div>
+                            </Link>
+
+                    )}
+                    
                     <div className='ms-4'>
                         <i className="bi bi-arrow-down-up me-4 fs-5"></i>
                         <i className="bi bi-suit-heart me-4 fs-5"></i>
@@ -63,7 +81,6 @@ function NavigationBar() {
                         <i className="bi bi-list fs-4 p-2"></i>
                         <span className="fs-5 ms-2 d-none d-lg-inline d-md-inline ">All Department</span>
                         <i className="bi bi-chevron-down fs-5 p-2 ms-2 d-none d-lg-inline d-md-inline"></i>
-                        
                         
                         </button>
                     </nav>
