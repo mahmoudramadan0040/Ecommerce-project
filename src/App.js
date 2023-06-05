@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="App">
 
-      <NavigationBar></NavigationBar>
+      {/* <NavigationBar></NavigationBar> */}
       {/* <Login></Login> */}
       <Routes>
         <Route element={<ProtectedRoutes />}>

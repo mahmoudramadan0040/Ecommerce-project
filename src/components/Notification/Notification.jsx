@@ -4,9 +4,16 @@ import 'react-toastify/dist/ReactToastify.css';
 function Notification(props) {
     useEffect(() => {
         console.log("asdasd");
-        toast.success(props.msg, {
-            position: toast.POSITION.TOP_RIGHT
-        })
+        if(props.context){
+            toast.success(props.msg, {
+                position: toast.POSITION.TOP_RIGHT
+            })
+        }else{
+            toast.error(props.msg, {
+                position: toast.POSITION.TOP_RIGHT
+            })
+        }
+        
     },[])
     return ( 
         <div>

@@ -16,7 +16,7 @@ def signup(request):
         user.set_password(request.data['password'])
         user.save()
         token = Token.objects.create(user = user)
-        return Response({"token: ": token.key, "user":serializer.data })
+        return Response({"token": token.key, "user":serializer.data })
     return Response(serializer.errors)
 
 
@@ -27,7 +27,7 @@ def login(request):
         if (user.check_password(request.data['password'])):
             token, created = Token.objects.get_or_create(user = user)
             serializer = UserSerializer(user)
-            return Response({"TOKEN: ": token.key, "USER: ": serializer.data})
+            return Response({"token": token.key, "user": serializer.data})
         
     
     return Response("Error, User Doesn’T")

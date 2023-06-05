@@ -1,10 +1,10 @@
 import style from './Register.module.css';
 import { useState ,useRef } from 'react';
-import {login} from '../../services/user.services';
+import {register} from '../../services/user.services';
 function Register() {
 
     let [FormsValues ,setFormsValues] = useState({
-        name:'',
+        username:'',
         email:'',
         password:''
     });
@@ -13,7 +13,7 @@ function Register() {
     let Inputpassword =useRef(null)
     let Inputname =useRef(null)
     let [errors ,setErrors] = useState({
-        name:null,
+        username:null,
         email:null,
         password:null
     })
@@ -22,12 +22,12 @@ function Register() {
     const handelsubmit = (event)=>{
         event.preventDefault();
         console.log(errors.email ,errors.password)
-        if(errors.email || errors.password || errors.name){
+        if(errors.email || errors.password || errors.username){
             setErrorsRun(true);
         }else{
             if(FormsValues){
                 console.log("dfsdfsd")
-                login(FormsValues)
+                register(FormsValues)
             }
             setErrorsRun(false);
         }
@@ -51,14 +51,14 @@ function Register() {
             console.log(errors)
             
         }
-        if(e.target.name == "name"){
+        if(e.target.name == "username"){
             
 
             if( e.target.value ){
-                setErrors({email:null})
+                setErrors({username:null})
                 setFormsValues({...FormsValues, [e.target.name]:e.target.value})
             }else{
-                setErrors({...errors,email:'invalid username'});
+                setErrors({...errors,username:'invalid username'});
             }
             console.log(errors)
             
@@ -135,13 +135,13 @@ function Register() {
                                     <input type="text" 
                                     onChange={operationHandeler} 
                                     ref={Inputname}
-                                    name="name"
-                                    className={`${(errors.name && errorRun) ? style.error_input:style.form_input}`}
+                                    name="username"
+                                    className={`${(errors.username && errorRun) ? style.error_input:style.form_input}`}
                                     id="exampleInputEmail1" 
                                     placeholder=' mahmoud ramadan ' aria-describedby="emailHelp"/>
                                     {/* validation error msg  */}
                                     <div className={`${style.errorMsg}`}>
-                                    {(errors.name && errorRun) ? errors.name : null}
+                                    {(errors.name && errorRun) ? errors.username : null}
                                     </div>
                                 </div>
                                 <div className="mb-2">

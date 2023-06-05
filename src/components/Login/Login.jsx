@@ -16,16 +16,24 @@ function Login() {
         password:null
     })
     let [errorRun,setErrorsRun]=useState(false)
-    let [toastMsq,SetToastMsq] = useState(false)
+    let [toastSuccessMsq,SettoastSuccessMsq] = useState(false)
+    let [toastfailureMsq,SettoastfailureMsq] = useState(false)
     const handelsubmit = (event)=>{
         event.preventDefault();
         if(errors.username || errors.password){
             setErrorsRun(true);
         }else{
             if(FormsValues){
-                let result =login(FormsValues).then(data =>console.log( data) );
-                console.log(result)
-                SetToastMsq(true);
+                login(FormsValues)
+                .then(result => {
+                    if(result == 200){
+                        SettoastSuccessMsq(true);
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    SettoastfailureMsq(true);
+                });
+                // console.log(result)
             }
             setErrorsRun(false);
         }
@@ -71,8 +79,11 @@ function Login() {
 
     return ( 
         <div className={`container`}>
-            {toastMsq ? (
-            <Notification msg={"login successfuly !"}></Notification>
+            {toastSuccessMsq ? (
+            <Notification msg={"login successfuly !"} context={true}></Notification>
+            ):''}
+            {toastfailureMsq ? (
+            <Notification msg={"loin failed  !"} context={false}></Notification>
             ):''}
             
             <div className="row justify-content-center">
