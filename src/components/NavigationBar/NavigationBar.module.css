@@ -10,8 +10,11 @@
     z-index: 3;
 }
 
-.search_product{
-    /* width: 60%; */
+.second_header{
+    position: fixed;
+    align-content: center;
+    left: 50%;
+    transform: translate(-50%);
 }
 .search{
     border:3px solid var(--head-color);
@@ -79,4 +82,8 @@
     font-family:var(--font-family);
     font-weight: bolder;
     color:var(--head-color)
+}
+.line_header{
+    opacity: .1;
+    box-shadow: 2px 1px rgb(192, 185, 185);
 }

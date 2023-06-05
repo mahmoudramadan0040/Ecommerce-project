@@ -5,7 +5,7 @@ function NavigationBar() {
 
     const [show, setShow] = useState(false);
     const handleScroll = () => {
-        if(window.scrollY > 30){
+        if(window.scrollY > 1){
             setShow(false)
         }else{
             setShow(true)
@@ -22,7 +22,7 @@ function NavigationBar() {
             <div 
             className={` 
             
-            d-flex mt-3 
+            d-flex mt-1 
             justify-content-between 
             align-items-center 
             container`}>
@@ -54,8 +54,8 @@ function NavigationBar() {
                 </div>
                 
             </div>
-            <hr className=' mt-3 m-0'></hr>
-            <div className={`d-flex container justify-content-between ${show ? 'd-flex':'d-none'}`}>
+            <hr className={`${style.line_header} mt-1 m-0 `}></hr>
+            <div className={`d-flex container justify-content-between ${show ? 'd-flex':'d-none'} ${style.second_header}`}>
                 <div className='m-0'>
                     <nav className={`${style.navbar}`}>
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">

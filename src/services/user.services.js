@@ -41,6 +41,10 @@ const register = async(registerData)=>{
 const getUser =(id) =>{
 
 }
+const logout =( ) =>{
+    localStorage.clear();
+    window.location.reload();
+}
 export {
     login,
     register,

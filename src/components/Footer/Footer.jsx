@@ -16,7 +16,10 @@ function Footer() {
                         <p className='mb-5 fs-5 text-sm-center'>
                         We are a team of designers and developers that create high quality WordPress
                         </p>
-                        <div className={`${style.footer_icons} d-flex justify-content-left justify-content-sm-center flex-wrap`}>
+                        <div className={`${style.footer_icons} d-flex 
+                        justify-content-center
+                        justify-content-md-left  
+                        justify-content-lg-left flex-wrap`}>
                             <div className={`${style.footer_icon}`}>
                                 <i className="bi bi-twitter"></i>
                             </div>
