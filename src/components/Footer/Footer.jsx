@@ -10,13 +10,13 @@ function Footer() {
                     col-md-6 
                     col-sm-12 
                     col-xm-12 mt-5'>
-                        <h3 className='mb-4'>
+                        <h3 className='mb-4 text-sm-center'>
                             <img src='https://weblearnbd.net/tphtml/shofy-prv/shofy/assets/img/logo/logo.svg' alt="logo"></img>
                         </h3>
-                        <p className='mb-5 fs-5'>
+                        <p className='mb-5 fs-5 text-sm-center'>
                         We are a team of designers and developers that create high quality WordPress
                         </p>
-                        <div className={`${style.footer_icons} d-flex justify-content-left flex-wrap`}>
+                        <div className={`${style.footer_icons} d-flex justify-content-left justify-content-sm-center flex-wrap`}>
                             <div className={`${style.footer_icon}`}>
                                 <i className="bi bi-twitter"></i>
                             </div>
@@ -37,7 +37,7 @@ function Footer() {
                     col-sm-12 
                     col-xm-12 mt-5'>
                         <h3>My Account</h3>
-                        <ul className={`${style.footer_list}`}>
+                        <ul className={`${style.footer_list} `}>
                             <li>track Orders</li>
                             <li>shipping</li>
                             <li>whishlist</li>

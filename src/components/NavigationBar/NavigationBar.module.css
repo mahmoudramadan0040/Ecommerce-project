@@ -10,10 +10,13 @@
     z-index: 3;
 }
 
+.search_product{
+    /* width: 60%; */
+}
 .search{
     border:3px solid var(--head-color);
-    padding: .5em;
-    width: 400px;
+    padding: .45em;
+    width: 70%;
 }
 .search:focus{
     /* border-color: var(--head-color) solid; */
@@ -24,7 +27,7 @@
     background-color: var(--head-color);
     color: aliceblue;
     border: none;
-    padding: .7em;
+    padding: .63em;
     width: 50px;
 }
 
@@ -46,7 +49,7 @@
     font-family: var(--font-family);
     font-weight: var(--font-header-weight);
     border:none;
-    width:250px;
+    width:100%;
     padding: .6em;
 
     
