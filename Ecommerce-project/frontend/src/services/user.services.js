@@ -36,14 +36,11 @@ const login = async (loginData)=>{
 }
 const register = async(registerData)=>{
     console.log(registerData)
-    let data = {
-            "first_name":registerData.first_name,
-            "last_name":registerData.last_name,
-            "email":registerData.email,
-            "password":registerData.password,
-            "image":registerData.image
-        }
-    return await axios.post(URL+'register/', data)
+    return await axios.post(URL+'register/', registerData,{
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    })
     .then(res =>{
         console.log(res)
         localStorage.setItem("token", res.data.token)
