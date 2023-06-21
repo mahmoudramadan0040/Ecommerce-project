@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaCartPlus, FaEye, FaHeart, FaMinus, FaPlus } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
+import { FaCartPlus, FaEye, FaHeart, FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Products.css';
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 const Products = ({ selectedCategoryId, categoryId }) => {
   const [products, setProducts] = useState([]);
@@ -12,6 +14,8 @@ const Products = ({ selectedCategoryId, categoryId }) => {
 
   const location = useLocation();
   const searchQuery = new URLSearchParams(location.search).get('search');
+
+  const navigate = useNavigate(); // useNavigate hook for navigation
 
   useEffect(() => {
     fetchProducts(selectedCategoryId || categoryId, searchQuery);
@@ -50,36 +54,48 @@ const Products = ({ selectedCategoryId, categoryId }) => {
   const handleQuantityIncrease = () => {
     setQuantity(quantity + 1);
   };
+
+  const handleAddToCart = async (productId, quantity) => {
+    try {
+      const response = await axios.post('http://localhost:8000/api/cart/add/', {
+        productId: productId,
+        quantity: quantity,
+      });
   
-  const handleAddToCart = async () => {
-    const username = localStorage.getItem('username');
+      if (response.status === 200) {
+        setCartCount((prevCount) => prevCount + quantity);
+        console.log(`Added ${quantity} quantity of product to the cart`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   
-    if (selectedProduct && selectedProduct.id) {
+
+
+  const handleUpdateClick = (productId) => {
+    const is_admin = localStorage.getItem('is_admin'); // Check if the user is an admin
+    if (is_admin) {
+      navigate(`/products/${productId}/update`); // Navigate to the UpdateProduct component
+    } else {
+      console.log('Only admin users can update products.');
+    }
+  };
+  
+  const handleDeleteProduct = async (productId) => {
+    const is_admin = localStorage.getItem('is_admin'); // Check if the user is an admin
+    if (is_admin) {
       try {
-        // Prepare the data to send in the API request
-        const data = {
-          user: username,
-          product_id: selectedProduct.id,
-          quantity: quantity,
-          
-        };
-  
-        // Make an API call to add the product to the cart
-        const response = await axios.post('http://127.0.0.1:8000/api/cart/add/', data);
-        
-        // Check the response status and update the cartCount if successful
-        if (response.status === 200) {
-          setCartCount(prevCount => prevCount + quantity);
-          console.log(`Adding ${quantity} quantity of product to cart`);
-        }
+        const response = await axios.delete(`http://localhost:8000/api/products/${productId}/`);
+        console.log('Product deleted successfully:', response.data);
+        fetchProducts(selectedCategoryId || categoryId, searchQuery);
       } catch (error) {
         console.error(error);
       }
     } else {
-      console.log('Selected product is null');
+      console.log('Only admin users can delete products.');
     }
   };
-  
 
   return (
     <div className="products-container">
@@ -90,10 +106,10 @@ const Products = ({ selectedCategoryId, categoryId }) => {
             <div className="product-image-container">
               <img className="product-image" src={product.image_url} alt={product.title} />
               <div className="overlay">
-              <button className="add-to-cart-btn" onClick={handleAddToCart}>
-                <FaCartPlus className="icon" />
-                Add to Cart
-              </button>
+                <button className="add-to-cart-btn" onClick={handleAddToCart}>
+                  <FaCartPlus className="icon" />
+                  Add to Cart
+                </button>
                 <button className="quick-view-btn" onClick={() => handleQuickView(product)}>
                   <FaEye className="icon" />
                   Quick View
@@ -110,6 +126,23 @@ const Products = ({ selectedCategoryId, categoryId }) => {
                 <p className="price">${product.price}</p>
                 <p className="details">{product.details}</p>
               </div>
+              <div className="product-actions">
+  {localStorage.getItem('is_admin') ? (
+    <>
+      <Link
+        to={`/products/${product.id}/update`}
+        className="update-link"
+        onClick={() => handleUpdateClick(product.id)}
+      >
+        Update
+      </Link>
+      <button className="delete-btn" onClick={() => handleDeleteProduct(product.id)}>
+        <FaTrash className="delete-icon" />
+      </button>
+    </>
+  ) : null}
+</div>
+
             </div>
           </div>
         ))}
@@ -130,9 +163,7 @@ const Products = ({ selectedCategoryId, categoryId }) => {
               </div>
               <div className="quick-view-info">
                 <h3>{selectedProduct.title}</h3>
-                <h3>{selectedProduct.id}</h3>
                 <p className="price">${selectedProduct.price}</p>
-                
                 <p className="details">{selectedProduct.description}</p>
                 <div className="quick-view-actions">
                   <div className="quantity-container">
@@ -148,7 +179,6 @@ const Products = ({ selectedCategoryId, categoryId }) => {
                     <FaCartPlus className="icon" />
                     Add to Cart
                   </button>
-                  <button className="add-to-cart-btn">Buy Now</button>
                 </div>
               </div>
             </div>

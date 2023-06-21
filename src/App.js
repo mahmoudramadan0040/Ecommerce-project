@@ -10,6 +10,7 @@ import Home from './components/Home/Home';
 import ProtectedRoutes from './components/ProtectedRoutes/ProtectedRoutes';
 import Cart from './components/Cart/Cart';
 import Products from './components/Products/Products';
+import UpdateProduct from './components/Products/UpdateProduct';
 function App() {
 
   return (
@@ -23,7 +24,7 @@ function App() {
         </Route>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        
+        <Route path="/products/:id/update" element={<UpdateProduct/>} />
         <Route path="/Cart" element={<Cart/>}/>
         <Route path="/Products" element={<Products/>}/>
         <Route path="*" element={<NotFound404></NotFound404>}/>

@@ -10,13 +10,17 @@ const login = async (loginData)=>{
     .then(res =>{
         let token =res.data.access;
         let username =res.data.username;
+        let email=res.data.email;
+        let isAdmin=res.data.is_admin;
         console.log(loginData)
         console.log(token ,username)
-        // let username=res.data.user?.username
         console.log("first here ")
         if(token){
             localStorage.setItem("token", token);
-            localStorage.setItem("username", username);
+            localStorage.setItem("Email", email);
+            localStorage.setItem("username",username)
+            localStorage.setItem("is_admin", isAdmin);
+
         }
         
         console.log(res)
@@ -33,15 +37,17 @@ const login = async (loginData)=>{
 const register = async(registerData)=>{
     console.log(registerData)
     let data = {
-            "name":registerData.username,
+            "first_name":registerData.first_name,
+            "last_name":registerData.last_name,
             "email":registerData.email,
-            "password":registerData.password
+            "password":registerData.password,
+            "image":registerData.image
         }
     return await axios.post(URL+'register/', data)
     .then(res =>{
         console.log(res)
         localStorage.setItem("token", res.data.token)
-        localStorage.setItem("username", res.data.username);
+        localStorage.setItem("email", res.data.email);
         console.log(res.status)
         return res.status;
     })

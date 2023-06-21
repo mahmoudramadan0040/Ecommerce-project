@@ -1,208 +1,256 @@
 import style from './Register.module.css';
-import { useState ,useRef } from 'react';
-import { Link ,useNavigate} from 'react-router-dom';
-import {register} from '../../services/user.services';
+import { useState, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { register } from '../../services/user.services';
+
 function Register() {
-    const navigate = useNavigate();
-    let [FormsValues ,setFormsValues] = useState({
-        username:'',
-        email:'',
-        password:''
-    });
-    let [RegisterError,setRegisterError] =useState(false) 
-    const [disabled,setDisabled] = useState(true);
-    let Inputemail =useRef('null')
-    let Inputpassword =useRef(null)
-    let Inputname =useRef(null)
-    let [errors ,setErrors] = useState({
-        username:null,
-        email:null,
-        password:null
-    })
-    
-    let [errorRun,setErrorsRun]=useState(false)
-    const handelsubmit = (event)=>{
-        setRegisterError(false)
-        event.preventDefault();
-        console.log(errors.email ,errors.password)
-        if(errors.email || errors.password || errors.username){
-            setErrorsRun(true);
-        }else{
-            if(FormsValues){
-                
-                register(FormsValues).then((result)=>{
-                    console.log(result)
-                    if(result == 201){
+  const navigate = useNavigate();
+  const [formsValues, setFormsValues] = useState({
+    email: '',
+    password: '',
+    first_name: '',
+    last_name: '',
+    image: null,
+  });
+  const [registerError, setRegisterError] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+  const inputEmail = useRef(null);
+  const inputPassword = useRef(null);
+  const inputFirstName = useRef(null);
+  const inputLastName = useRef(null);
+  const inputImage = useRef(null);
+  const [errors, setErrors] = useState({
+    email: null,
+    password: null,
+    first_name: null,
+    last_name: null,
+    image: null,
+  });
+  const [errorRun, setErrorsRun] = useState(false);
 
-                        setTimeout(() => {
-                            navigate('/home')
-                        }, 2000);
-                    }else{
-                        setRegisterError(true)
-                    }
-                })
-            }
-            setErrorsRun(false);
-        }
-        
-        // console.log(FormsValues)
+  const handleSubmit = (event) => {
+    setRegisterError(false);
+    event.preventDefault();
+
+    if (
+      errors.email ||
+      errors.password ||
+      errors.first_name ||
+      errors.last_name ||
+      errors.image
+    ) {
+      setErrorsRun(true);
+    } else {
+      const formData = {
+        email: inputEmail.current.value,
+        password: inputPassword.current.value,
+        first_name: inputFirstName.current.value,
+        last_name: inputLastName.current.value,
+        image: inputImage.current.files[0],
+      };
+
+      register(formData)
+        .then((result) => {
+          console.log(result);
+          if (result.status === 'success') {
+            setTimeout(() => {
+              navigate('/home');
+            }, 2000);
+          } else {
+            setRegisterError(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          setRegisterError(true);
+        });
+
+      setErrorsRun(false);
     }
-    const operationHandeler = (e) =>{
-        // eslint-disable-next-line
-        setErrorsRun(false)
-        if(e.target.name == "email"){
-            let regex = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
-            console.log(regex.test(e.target.value))
-            console.log(e.target.value)
-            if( regex.test(e.target.value) ){
-                setErrors({email:null})
-                setFormsValues({...FormsValues, [e.target.name]:e.target.value})
-            }else{
-                
-                setErrors({...errors,email:'invalid email address ! , example formate mahmoud@example.com'});
-            }
-            console.log(errors)
-            
-        }
-        if(e.target.name == "username"){
-            
+  };
 
-            if( e.target.value ){
-                setErrors({username:null})
-                setFormsValues({...FormsValues, [e.target.name]:e.target.value})
-            }else{
-                setErrors({...errors,username:'invalid username'});
-            }
-            console.log(errors)
-            
-        }
-        // eslint-disable-next-line
-        if(e.target.name == "password"){
-            if(e.target.value.length >= 4){
-                setFormsValues({...FormsValues, [e.target.name]:e.target.value})
-                setErrors({password:null})
-            }
-            else{
-                setErrors({...errors,password:'password must be at least 4 characters !'});
-            }
-        }
+  const operationHandler = (e) => {
+    setErrorsRun(false);
 
-        // check disabled submit btn based on data
-        console.log(Inputpassword.current.value.length)
-        if(!Inputpassword.current.value.length || 
-           !Inputemail.current.value.length    ||  
-           !Inputname.current.value.length){
-            setDisabled(true);
-        }
-        else{
-            setDisabled(false);
-        }
-       
+    if (e.target.name === 'email') {
+      const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      if (regex.test(e.target.value)) {
+        setErrors({ ...errors, email: null });
+        setFormsValues({ ...formsValues, [e.target.name]: e.target.value });
+      } else {
+        setErrors({
+          ...errors,
+          email: 'Invalid email address! Example format: mahmoud@example.com',
+        });
+      }
     }
 
+    if (e.target.name === 'first_name') {
+      if (e.target.value) {
+        setErrors({ ...errors, first_name: null });
+        setFormsValues({ ...formsValues, [e.target.name]: e.target.value });
+      } else {
+        setErrors({ ...errors, first_name: 'Invalid first name' });
+      }
+    }
 
+    if (e.target.name === 'last_name') {
+      if (e.target.value) {
+        setErrors({ ...errors, last_name: null });
+        setFormsValues({ ...formsValues, [e.target.name]: e.target.value });
+      } else {
+        setErrors({ ...errors, last_name: 'Invalid last name' });
+      }
+    }
 
-    return ( 
-        <div className={`${style.register_from} container`}>
-            <div className="row justify-content-center mt-5">
+    if (e.target.name === 'password') {
+      if (e.target.value.length >= 4) {
+        setFormsValues({ ...formsValues, [e.target.name]: e.target.value });
+        setErrors({ ...errors, password: null });
+      } else {
+        setErrors({
+          ...errors,
+          password: 'Password must be at least 4 characters!',
+        });
+      }
+    }
 
-                <h1 className='text-center mt-5 mb-3 '>Register Now </h1>
-                <div className={`${style.sign_form}`}>
-                    <div className={`${style.form_content}`}>
-                        <div className={`${style.header_from}`}>Sign Up Shofy</div>
-                        
-                        <div className='text-center'> already have an account ? <span className={`${style.sign_text}`}><Link to="/login" className={`${style.sign_text}`}>sign in</Link></span> </div>
-                        <div>
-                            <div className={`${style.register_icons} d-flex justify-content-center flex-wrap flex-shrink-0`}>
-                                <div className={`${style.register_icon} d-flex align-items-center`}>
+    if (e.target.name === 'image') {
+      const file = e.target.files[0];
+      if (file) {
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        const allowedSize = 5 * 1024 * 1024; // 5MB
 
-                                    <div>
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 48 48" width="40px" height="40px">
-                                    <path fill="#FFC107" 
-                                    d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627
-                                    ,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268
-                                    ,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
-                                    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,
-                                    3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" 
-                                    d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
-                                    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087
-                                    ,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg></div> 
-                                    <div className='ms-3'>sign with google</div>
-                                </div>
-                                <div className={`${style.register_icon}`}>
-                                    <i className={`bi bi-facebook ${style.facebook_icon}`}></i>
-                                </div>
-                                <div className={`${style.register_icon}`}>
-                                    <i className={`bi bi-apple ${style.apple_icon}`}></i>
-                                </div>
-                            </div>
-                            <div className='mt-4'>
-                                <hr className={`${style.break_line}`}></hr>
-                                <div className={`text-center ${style.line_content}`}>or Sign up with Email</div>
-                            </div>
-                            {RegisterError ? (
-                                    <div>
-                                        <div className="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <strong>Erorr</strong> email already exists ,please try another email !
-                                            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    </div>
-                                    
-                                ):null}
-                            <form onSubmit={handelsubmit}>
-                                <div className="mb-2">
-                                    <label htmlFor="exampleInputusername1" className={`${style.form_label}`}>Your Name </label>
-                                    <input type="text" 
-                                    onChange={operationHandeler} 
-                                    ref={Inputname}
-                                    name="username"
-                                    className={`${(errors.username && errorRun) ? style.error_input:style.form_input}`}
-                                    id="exampleInputEmail1" 
-                                    placeholder=' mahmoud ramadan ' aria-describedby="emailHelp"/>
-                                    {/* validation error msg  */}
-                                    <div className={`${style.errorMsg}`}>
-                                    {(errors.username && errorRun) ? errors.username : null}
-                                    </div>
-                                </div>
-                                <div className="mb-2">
-                                    <label htmlFor="exampleInputEmail1" className={`${style.form_label}`}>Your Email </label>
-                                    <input type="text" 
-                                    onChange={operationHandeler} 
-                                    ref={Inputemail}
-                                    name="email"
-                                    className={`${(errors.email && errorRun) ? style.error_input:style.form_input}`}
-                                    id="exampleInputEmail1" 
-                                    placeholder=' shopfy@mail.com ' aria-describedby="emailHelp"/>
-                                    {/* validation error msg  */}
-                                    <div className={`${style.errorMsg}`}>
-                                    {(errors.email && errorRun) ? errors.email : null}
-                                    </div>
-                                </div>
-                                <div className="mb-2">
-                                    <label htmlFor="exampleInputPassword1" className={`${style.form_label}`}>Password</label>
-                                    <input type="password"
-                                    onChange={operationHandeler} 
-                                    ref={Inputpassword}
-                                    name="password"
-                                    className={`${(errors.password && errorRun) ? style.error_input:style.form_input}`}
-                                    placeholder=' Min. 6 character' 
-                                    id="exampleInputPassword1"/>
-                                    {/* validation error msg  */}
-                                    <div className={`${style.errorMsg}`}>
-                                    {(errors.password && errorRun) ? errors.password : null}
-                                    </div>
-                                </div>
-                                <div>
-                                    <button type="submit" disabled={disabled} className={`${style.form_submit_btn}`}>Sign Up</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+        if (allowedTypes.includes(file.type) && file.size <= allowedSize) {
+          setFormsValues({ ...formsValues, image: file });
+          setErrors({ ...errors, image: null });
+        } else {
+          setFormsValues({ ...formsValues, image: null });
+          setErrors({
+            ...errors,
+            image:
+              'Invalid image format or size. Please upload a JPEG, PNG, or GIF image up to 5MB.',
+          });
+        }
+      }
+    }
+
+    const isFormValid =
+      inputPassword.current.value.length &&
+      inputEmail.current.value.length &&
+      inputFirstName.current.value.length &&
+      inputLastName.current.value.length &&
+      inputImage.current.value;
+
+    setDisabled(!isFormValid);
+  };
+
+  return (
+    <div className={`${style.register_form} container`}>
+      <div className="row justify-content-center mt-5">
+        <h1 className="text-center mt-5 mb-4">Register</h1>
+        <div className="col-md-6">
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Email address</label>
+              <input
+                type="email"
+                name="email"
+                className={`form-control ${
+                  errors.email ? 'is-invalid' : ''
+                }`}
+                placeholder="Enter email"
+                ref={inputEmail}
+                onChange={operationHandler}
+              />
+              {errors.email && errorRun && (
+                <div className="invalid-feedback">{errors.email}</div>
+              )}
             </div>
+            <div className="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                name="password"
+                className={`form-control ${
+                  errors.password ? 'is-invalid' : ''
+                }`}
+                placeholder="Enter password"
+                ref={inputPassword}
+                onChange={operationHandler}
+              />
+              {errors.password && errorRun && (
+                <div className="invalid-feedback">{errors.password}</div>
+              )}
+            </div>
+            <div className="form-group">
+              <label>First Name</label>
+              <input
+                type="text"
+                name="first_name"
+                className={`form-control ${
+                  errors.first_name ? 'is-invalid' : ''
+                }`}
+                placeholder="Enter first name"
+                ref={inputFirstName}
+                onChange={operationHandler}
+              />
+              {errors.first_name && errorRun && (
+                <div className="invalid-feedback">{errors.first_name}</div>
+              )}
+            </div>
+            <div className="form-group">
+              <label>Last Name</label>
+              <input
+                type="text"
+                name="last_name"
+                className={`form-control ${
+                  errors.last_name ? 'is-invalid' : ''
+                }`}
+                placeholder="Enter last name"
+                ref={inputLastName}
+                onChange={operationHandler}
+              />
+              {errors.last_name && errorRun && (
+                <div className="invalid-feedback">{errors.last_name}</div>
+              )}
+            </div>
+            <div className="form-group">
+              <label>Image</label>
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                className={`form-control-file ${
+                  errors.image ? 'is-invalid' : ''
+                }`}
+                ref={inputImage}
+                onChange={operationHandler}
+              />
+              {errors.image && errorRun && (
+                <div className="invalid-feedback">{errors.image}</div>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={disabled}
+            >
+              Register
+            </button>
+            {registerError && (
+              <div className="alert alert-danger mt-3" role="alert">
+                An error occurred during registration. Please try again later.
+              </div>
+            )}
+            <div className="text-center mt-3">
+              Already have an account? <Link to="/login">Login</Link>
+            </div>
+          </form>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default Register;
