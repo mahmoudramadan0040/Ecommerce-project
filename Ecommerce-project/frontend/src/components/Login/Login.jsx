@@ -55,7 +55,7 @@ function Login() {
         if(e.target.name == "email"){
             let regex = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
             if( regex.test(e.target.value)){
-                setErrors({email:null})
+                setErrors({...errors,email:null})
                 setFormsValues({...FormsValues, [e.target.name]:e.target.value})
             }else{
                 setErrors({...errors,email:'invalid email , email should as mahmoud@email.com '});
@@ -67,7 +67,7 @@ function Login() {
         if(e.target.name == "password"){
             if(e.target.value.length >= 4){
                 setFormsValues({...FormsValues, [e.target.name]:e.target.value})
-                setErrors({password:null})
+                setErrors({...errors,password:null})
             }
             else{
                 setErrors({...errors,password:'password must be at least 4 characters !'});
