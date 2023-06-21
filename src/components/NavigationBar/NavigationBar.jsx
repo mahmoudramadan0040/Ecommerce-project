@@ -9,7 +9,7 @@ function NavigationBar() {
   const [auth, setAuth] = useState(false);
   const [show, setShow] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [cartCount, setCartCount] = useState(0); // New state for cart count
+  const [cartCount, setCartCount] = useState(0); 
   const navigate = useNavigate();
 
   const handleScroll = () => {
